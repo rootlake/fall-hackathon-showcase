@@ -191,14 +191,17 @@
     return map;
   }
 
-  function standings(submissions, ratings, tieOrders) {
+  function standings(submissions, ratings, tieOrders, orders) {
     const entered = entriesByDept(submissions);
     const perDept = {};
     const totals = {};
     TEAMS.forEach((team) => { totals[team.id] = 0; });
     let pending = false;
     DEPTS.forEach((dept) => {
-      const result = columnResult(entered[dept.id], (ratings || {})[dept.id], (tieOrders || {})[dept.id]);
+      const listed = ((orders || {})[dept.id] || []).filter((id) => entered[dept.id].includes(id));
+      const result = listed.length === entered[dept.id].length && listed.length > 1
+        ? { state: "ranked", places: listed.map((team, i) => ({ team: team, points: PAY[i], sum: null })) }
+        : columnResult(entered[dept.id], (ratings || {})[dept.id], (tieOrders || {})[dept.id]);
       perDept[dept.id] = result;
       if (result.state === "needs-judges" || result.state === "tie") pending = true;
       (result.places || []).forEach((place) => { totals[place.team] += place.points; });

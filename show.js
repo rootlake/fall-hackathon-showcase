@@ -20,7 +20,7 @@
   }
 
   function blank() {
-    return { submissions: [], ratings: {}, tieOrders: {}, overallOrder: [], spotlights: {} };
+    return { submissions: [], ratings: {}, tieOrders: {}, orders: {}, overallOrder: [], spotlights: {} };
   }
 
   function save() {
@@ -48,7 +48,7 @@
   }
 
   function standing() {
-    return L.standings(state.submissions, state.ratings, state.tieOrders);
+    return L.standings(state.submissions, state.ratings, state.tieOrders, state.orders);
   }
 
   function submission(id) {
@@ -302,6 +302,10 @@
       if (response.ok) {
         const data = await response.json();
         const incoming = data.submissions || [];
+        if (data.orders) {
+          state.orders = data.orders;
+          save();
+        }
         const sig = (list) => list.map((sub) => sub.id + ":" + (sub.thumb || "") + ":" + (sub.dq ? "dq" : "")).join("\n");
         const savedIds = sig(state.submissions);
         const nextIds = sig(incoming);

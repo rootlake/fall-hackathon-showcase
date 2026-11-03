@@ -1,4 +1,7 @@
 {
+  "orders": {
+    "languages": ["momentum", "wavelength", "amplitude"]
+  },
   "submissions": [
     {
       "id": "wavelength-1",

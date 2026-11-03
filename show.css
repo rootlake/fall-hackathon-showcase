@@ -472,6 +472,22 @@ h2 { font-size: 1.7rem; }
   color: var(--measure);
 }
 .stage-slide .faceoff, .stage-slide .solo-show { width: 100%; }
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.55rem 0.7rem;
+}
+.gallery-card { margin: 0; min-width: 0; }
+.gallery-card .thumb { height: auto; aspect-ratio: 1; }
+.gallery-card figcaption {
+  margin-top: 0.28rem;
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(0.85rem, 1.35vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.stage-slide:has(.gallery) { padding: 3vh 2.5vw 5vh; }
+.stage-slide:has(.gallery) h1 { margin-bottom: 0.55rem; }
 .tie-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; margin-top: 1.2rem; }
 .banner {
   display: flex;

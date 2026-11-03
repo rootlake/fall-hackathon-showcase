@@ -3,8 +3,11 @@
    one-point race and holds the two solo 4s until the last cards. */
 const ShowClicks = (function () {
   const STEPS = [
+    { kind: "gallery" },
+    { kind: "preview", dept: "art" },
     { kind: "points", dept: "art" },
     { kind: "board", depts: ["art"] },
+    { kind: "preview", dept: "languages" },
     { kind: "points", dept: "languages" },
     { kind: "board", depts: ["art", "languages"] },
     { kind: "faceoff", dept: "math" },
@@ -19,13 +22,15 @@ const ShowClicks = (function () {
     { kind: "finale" },
   ];
 
-  function panels(deptId, withPoints, withNotes) {
+  function panels(deptId, withPoints, withNotes, mixed) {
     const now = S.standing();
     const result = now.perDept[deptId];
     const teams = now.entered[deptId];
     const places = result.places || [];
     const ready = result.state === "ranked" || result.state === "solo";
-    const order = ready && places.length === teams.length ? places.map((row) => row.team) : teams;
+    let order = teams.slice();
+    if (mixed) shuffle(order);
+    else if (ready && places.length === teams.length) order = places.map((row) => row.team);
     const html = order.map((teamId) => {
       const sub = S.covering(teamId, deptId);
       const place = places.find((row) => row.team === teamId);
@@ -110,11 +115,23 @@ const ShowClicks = (function () {
     }, 1200);
   }
 
+  function gallery() {
+    const subs = shuffle((S.state.submissions || []).filter((sub) => !sub.dq).slice());
+    const cards = subs.map((sub) => {
+      const team = S.L.teamById(sub.team);
+      return '<figure class="gallery-card">' + S.thumb(sub) +
+        '<figcaption><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</figcaption></figure>";
+    }).join("");
+    return '<h1>Hackathon Results</h1><div class="gallery">' + cards + "</div>";
+  }
+
   function slide(step) {
+    if (step.kind === "gallery") return gallery();
     const dept = S.L.deptById(step.dept);
     if (step.kind === "board") return "";
-    if (step.kind === "faceoff") {
-      return "<h1>" + S.esc(dept.name) + " face-off</h1>" + panels(step.dept, false, false).html;
+    if (step.kind === "faceoff" || step.kind === "preview") {
+      const suffix = step.kind === "faceoff" ? " face-off" : "";
+      return "<h1>" + S.esc(dept.name) + suffix + "</h1>" + panels(step.dept, false, false, true).html;
     }
     const scored = panels(step.dept, true, true);
     const title = "<h1>" + S.esc(dept.name) + "</h1>";

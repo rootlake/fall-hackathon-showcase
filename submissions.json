@@ -3,7 +3,8 @@
     "languages": ["momentum", "wavelength", "amplitude"],
     "art": ["amplitude", "momentum", "torque"],
     "history": ["wavelength", "torque"],
-    "math": ["amplitude", "torque", "momentum"]
+    "math": ["amplitude", "torque", "momentum"],
+    "science": ["torque", "amplitude", "wavelength"]
   },
   "submissions": [
     {

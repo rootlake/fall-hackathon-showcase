@@ -250,10 +250,14 @@ const ShowRender = {
       body = '<p class="lead">' + S.esc(S.L.teamById(teams[0]).name) + ' is alone here. That is <b>4</b> points.</p>' +
         '<div class="solo-show">' + projectPanel(sub, teams[0], 4) + "</div>";
     } else {
-      const across = teams.length >= 4 ? "n4" : "n" + teams.length;
-      body = '<div class="faceoff ' + across + '">' + teams.map((teamId) => {
+      const places = result.places || [];
+      const ranked = result.state === "ranked" && places.length === teams.length
+        ? places.map((row) => row.team)
+        : teams;
+      const across = ranked.length >= 4 ? "n4" : "n" + ranked.length;
+      body = '<div class="faceoff ' + across + '">' + ranked.map((teamId) => {
         const sub = S.covering(teamId, dept.id);
-        const place = (result.places || []).find((row) => row.team === teamId);
+        const place = places.find((row) => row.team === teamId);
         return projectPanel(sub, teamId, place ? place.points : null);
       }).join("") + "</div>";
     }

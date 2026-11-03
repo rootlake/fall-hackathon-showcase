@@ -172,6 +172,9 @@ h2 { font-size: 1.7rem; }
   align-items: center;
 }
 .faceoff:has(.noted) { grid-template-columns: 1fr; }
+.faceoff.n3:has(.noted) { grid-template-columns: 1fr 1fr 1fr; }
+.faceoff.n3 .panel.show.noted { grid-template-columns: 1fr; align-items: start; }
+.faceoff.n3 .faculty { font-size: clamp(1.15rem, 1.7vw, 1.55rem); }
 .solo-show:has(.noted) { width: min(76rem, 100%); }
 .solo-show:has(.noted) .panel.show { width: 100%; }
 .faculty {

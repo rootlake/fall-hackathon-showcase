@@ -473,21 +473,49 @@ h2 { font-size: 1.7rem; }
 }
 .stage-slide .faceoff, .stage-slide .solo-show { width: 100%; }
 .gallery {
+  flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.55rem 0.7rem;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 1.15rem 1.35rem;
 }
-.gallery-card { margin: 0; min-width: 0; }
-.gallery-card .thumb { height: auto; aspect-ratio: 1; }
+.gallery-card {
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  animation: jiggle 2.8s ease-in-out infinite;
+}
+.gallery-card:nth-child(odd) { animation-duration: 3.4s; }
+.gallery-card:nth-child(3n) { animation-duration: 2.3s; animation-delay: -0.8s; }
+.gallery-card:nth-child(4n+1) { animation-delay: -1.5s; }
+.gallery-card:nth-child(5n+2) { animation-duration: 3.8s; animation-delay: -2.1s; }
+.gallery-card .thumb { flex: 1; height: auto; min-height: 0; aspect-ratio: auto; }
 .gallery-card figcaption {
-  margin-top: 0.28rem;
+  flex: none;
+  margin-top: 0.2rem;
   font-family: "Iowan Old Style", Palatino, Georgia, serif;
-  font-size: clamp(0.85rem, 1.35vw, 1.15rem);
+  font-size: clamp(0.72rem, 1.1vw, 0.95rem);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.1;
 }
-.stage-slide:has(.gallery) { padding: 3vh 2.5vw 5vh; }
-.stage-slide:has(.gallery) h1 { margin-bottom: 0.55rem; }
+body.stage:has(.gallery) { overflow: hidden; height: 100vh; }
+.stage-slide.show-step:has(.gallery) {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding: 2vh 2.6vw 1.6vh;
+}
+.stage-slide:has(.gallery) h1 { margin: 0 0 0.7rem; font-size: clamp(1.8rem, 3.2vw, 2.6rem); }
+.stage-slide:has(.gallery) .keys { top: 1.1rem; bottom: auto; }
+@keyframes jiggle {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  30% { transform: translate(2px, -4px) rotate(-0.8deg); }
+  60% { transform: translate(-3px, 2px) rotate(0.7deg); }
+}
 .tie-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; margin-top: 1.2rem; }
 .banner {
   display: flex;

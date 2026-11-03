@@ -89,6 +89,17 @@
     return '<div class="thumb poster ' + esc(dept) + '"><span>' + label + "</span></div>";
   }
 
+  function memberLine(team) {
+    const names = ((team && team.members) || []).slice();
+    for (let i = names.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const held = names[i];
+      names[i] = names[j];
+      names[j] = held;
+    }
+    return esc(names.join(", "));
+  }
+
   function card(sub) {
     return '<a class="card" href="#/teams/' + sub.team + "/" + sub.id + '">' + thumb(sub) +
       '<div class="meta"><strong>' + esc(subName(sub)) + "</strong><br><small>" +
@@ -98,7 +109,7 @@
   function publish() {
     window.S = {
       L, app, treeEl, crumbEl, state, esc, safeUrl, standing, submission, teamSubs,
-      covering, openUrl, host, subName, thumb, card, revealAt, presentAt, showAt, openStage, notesOn,
+      covering, openUrl, host, subName, thumb, card, memberLine, revealAt, presentAt, showAt, openStage, notesOn,
       WORDS: { 4: "Fourth", 3: "Third", 1: "First" },
     };
   }
@@ -170,10 +181,12 @@
   app.addEventListener("click", (event) => {
     const el = event.target.closest("[data-act]");
     if (!el) {
-      if (hashParts()[0] === "show" && !event.target.closest("a")) {
-        showAt = Math.min(ShowClicks.count - 1, showAt + 1);
-        route();
-      }
+        if (hashParts()[0] === "show" && !event.target.closest("a")) {
+          if (!ShowClicks.bump(1)) {
+            showAt = Math.min(ShowClicks.count - 1, showAt + 1);
+            route();
+          }
+        }
       return;
     }
     const act = el.dataset.act;
@@ -271,8 +284,10 @@
     } else if (view === "show" && (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === " ")) {
       event.preventDefault();
       const dir = event.key === "ArrowLeft" ? -1 : 1;
-      showAt = Math.min(ShowClicks.count - 1, Math.max(0, showAt + dir));
-      route();
+      if (!ShowClicks.bump(dir)) {
+        showAt = Math.min(ShowClicks.count - 1, Math.max(0, showAt + dir));
+        route();
+      }
     } else if (view === "present" && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
       publish();
       const run = ShowRender.run();

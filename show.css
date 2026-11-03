@@ -94,7 +94,20 @@ h2 { font-size: 1.7rem; }
   font-weight: 500;
   color: var(--measure);
 }
-.members { margin: -0.4rem 0 0.6rem; color: var(--steel); }
+.roster {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.25;
+  color: var(--steel);
+}
+.panel.show h2 { padding-right: 2.6rem; }
+.show-board .roster { font-size: clamp(1rem, 2vw, 1.35rem); }
+.team-line .roster { font-size: clamp(1.15rem, 2.2vw, 1.7rem); }
+.tree .roster { font-size: 0.68rem; }
 
 .cards {
   display: grid;
@@ -387,6 +400,22 @@ h2 { font-size: 1.7rem; }
   color: var(--steel);
 }
 .called b { color: var(--ink); font-weight: 600; }
+.finale-pop { animation: finale-pop 0.6s cubic-bezier(0.16, 0.84, 0.3, 1); }
+.stage-slide.finale-pop { justify-content: center; }
+.finale-points {
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  color: var(--measure);
+  animation: points-in 0.65s 0.12s both;
+}
+.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+@keyframes finale-pop {
+  from { opacity: 0; transform: translateY(1.6rem) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes points-in {
+  from { opacity: 0; transform: scale(0.55); }
+  to { opacity: 1; transform: none; }
+}
 .keys {
   position: fixed;
   right: 1.2rem;

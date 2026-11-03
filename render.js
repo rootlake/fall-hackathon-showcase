@@ -7,7 +7,8 @@ function projectPanel(sub, teamId, points, notes) {
   const showNotes = notes == null ? S.notesOn : notes;
   const quote = showNotes && sub && sub.note ? '<blockquote class="faculty">' + S.esc(sub.note) + "</blockquote>" : "";
   return '<article class="panel show' + (quote ? " noted" : "") + '"><div class="demo">' + award +
-    '<h2><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</h2>" +
+    '<h2><i class="mark">' + team.mark + "</i> " + S.esc(team.name) +
+    '<small class="roster">' + S.memberLine(team) + "</small></h2>" +
     (sub ? S.thumb(sub) : "") +
     '<p class="proj">' + S.esc(sub ? (sub.label || S.subName(sub)) : "") + "</p>" +
     (src ? '<a class="live" href="' + S.esc(src) + '" target="_blank" rel="noopener">' + S.esc(src) + "</a>" : "<p>No public link.</p>") +
@@ -23,7 +24,8 @@ const ShowRender = {
     html += '<div class="branch">teams</div>';
     S.L.TEAMS.forEach((team) => {
       const href = "#/teams/" + team.id;
-      html += '<a class="d2' + here(href) + '" href="' + href + '">' + S.esc(team.name) + "</a>";
+      html += '<a class="d2' + here(href) + '" href="' + href + '">' + S.esc(team.name) +
+        '<small class="roster">' + S.memberLine(team) + "</small></a>";
       if (view === "teams" && id === team.id) {
         S.teamSubs(team.id).forEach((sub) => {
           const leaf = href + "/" + sub.id;
@@ -107,7 +109,7 @@ const ShowRender = {
     html += '<div class="pts-head">pts</div>';
     S.L.TEAMS.forEach((team) => {
       html += '<a class="team-head" href="#/teams/' + team.id + '"><i class="mark">' + team.mark + "</i> " + S.esc(team.name) +
-        "<small>" + S.esc(team.members.join(", ")) + "</small></a>";
+        "<small class=\"roster\">" + S.memberLine(team) + "</small></a>";
       const subs = S.teamSubs(team.id);
       if (!filed) {
         subs.slice(0, 4).forEach((sub) => { html += openTile(sub, team, "", sub.id); });
@@ -161,7 +163,7 @@ const ShowRender = {
     const hint = (subs.find((sub) => sub.hint && sub.hint.length) || {}).hint;
     const filed = new Set(subs.flatMap((sub) => sub.departments || []));
     S.app.innerHTML = '<h1><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</h1>" +
-      '<p class="members">' + S.esc(team.members.join(", ")) + "</p>" +
+      '<p class="members roster">' + S.memberLine(team) + "</p>" +
       (filed.size > 4 ? '<p class="warn">Filed in ' + filed.size + " departments. The challenge allows four.</p>" : "") +
       (hint ? '<p class="quiet-note">The form listed ' + S.esc(hint.map((id) => S.L.deptById(id).name).join(", ")) + ".</p>" : "") +
       (subs.length ? '<div class="quad fill">' + subs.map(S.card).join("") + "</div>" : "<p>Nothing from this team yet.</p>");
@@ -204,7 +206,8 @@ const ShowRender = {
     });
     html += '<div class="pts-head">pts</div>';
     S.L.TEAMS.forEach((team) => {
-      html += '<a class="team-head" href="#/teams/' + team.id + '"><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</a>";
+      html += '<a class="team-head" href="#/teams/' + team.id + '"><i class="mark">' + team.mark + "</i> " + S.esc(team.name) +
+        '<small class="roster">' + S.memberLine(team) + "</small></a>";
       S.L.DEPTS.forEach((dept) => {
         const result = now.perDept[dept.id];
         const sub = S.covering(team.id, dept.id);
@@ -311,7 +314,7 @@ const ShowRender = {
       return place ? "<li>" + S.esc(dept.name) + " " + place.points + "</li>" : "";
     }).join("");
     S.app.innerHTML = '<section class="stage-slide"><p class="place-word">' + S.WORDS[step.place] + '</p><p class="team-line"><i class="mark">' +
-      team.mark + "</i> " + S.esc(team.name) + '</p><p class="points-line">' + step.points + ' points</p><ul class="chips">' + chips +
+      team.mark + "</i> " + S.esc(team.name) + '<small class="roster">' + S.memberLine(team) + "</small></p><p class=\"points-line\">" + step.points + " points</p><ul class=\"chips\">" + chips +
       "</ul>" + (called.length ? '<p class="called">' + called.map((item) => S.WORDS[item.place] + " <b>" + S.esc(S.L.teamById(item.team).name) + "</b>").join(" · ") + "</p>" : "") +
       '<p class="keys">Arrow keys</p></section>';
   },

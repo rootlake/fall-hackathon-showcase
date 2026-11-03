@@ -1,10 +1,11 @@
 /* Views for the show. Reads the shared `S` object set by show.js. */
 
-function projectPanel(sub, teamId, points) {
+function projectPanel(sub, teamId, points, notes) {
   const team = S.L.teamById(teamId);
   const src = sub ? S.openUrl(sub) : "";
   const award = points == null ? "" : '<b class="award">' + points + "</b>";
-  const quote = S.notesOn && sub && sub.note ? '<blockquote class="faculty">' + S.esc(sub.note) + "</blockquote>" : "";
+  const showNotes = notes == null ? S.notesOn : notes;
+  const quote = showNotes && sub && sub.note ? '<blockquote class="faculty">' + S.esc(sub.note) + "</blockquote>" : "";
   return '<article class="panel show' + (quote ? " noted" : "") + '"><div class="demo">' + award +
     '<h2><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</h2>" +
     (sub ? S.thumb(sub) : "") +
@@ -39,6 +40,7 @@ const ShowRender = {
       const flag = st === "needs-judges" || st === "tie" ? ' <span class="flag">face-off</span>' : "";
       html += '<a class="d2' + here(href) + '" href="' + href + '">' + S.esc(dept.name) + flag + "</a>";
     });
+    html += '<a class="' + here("#/show") + '" href="#/show">show</a>';
     html += '<a class="' + here("#/reveal") + '" href="#/reveal">reveal</a>';
     html += '<a class="' + here("#/spotlight") + '" href="#/spotlight">spotlight</a>';
     html += '<a class="' + here("#/sheet") + '" href="#/sheet">form</a>';

@@ -8,6 +8,7 @@
   let state = load();
   let revealAt = 0;
   let presentAt = 0;
+  let showAt = 0;
   let notesOn = true;
   let openStage = "pack";
   let lastView = "";
@@ -97,7 +98,7 @@
   function publish() {
     window.S = {
       L, app, treeEl, crumbEl, state, esc, safeUrl, standing, submission, teamSubs,
-      covering, openUrl, host, subName, thumb, card, revealAt, presentAt, openStage, notesOn,
+      covering, openUrl, host, subName, thumb, card, revealAt, presentAt, showAt, openStage, notesOn,
       WORDS: { 4: "Fourth", 3: "Third", 1: "First" },
     };
   }
@@ -121,7 +122,7 @@
         if (revealAt > steps.length - 1) revealAt = Math.max(0, steps.length - 1);
       }
     }
-    document.body.className = view === "reveal" || view === "present" ? "stage" : view === "judge" ? "judge" : "";
+    document.body.className = view === "reveal" || view === "present" || view === "show" ? "stage" : view === "judge" ? "judge" : "";
     publish();
     ShowRender.tree(view, parts[1]);
     ShowRender.crumb(parts);
@@ -132,6 +133,7 @@
     else if (view === "departments") ShowRender.deptIndex();
     else if (view === "judge") ShowRender.dept(parts[1], true);
     else if (view === "reveal") ShowRender.reveal();
+    else if (view === "show") ShowClicks.render(showAt);
     else if (view === "spotlight") ShowRender.spotlight();
     else if (view === "present") ShowRender.present();
     else if (view === "sheet") ShowRender.sheet();
@@ -167,7 +169,13 @@
 
   app.addEventListener("click", (event) => {
     const el = event.target.closest("[data-act]");
-    if (!el) return;
+    if (!el) {
+      if (hashParts()[0] === "show" && !event.target.closest("a")) {
+        showAt = Math.min(ShowClicks.count - 1, showAt + 1);
+        route();
+      }
+      return;
+    }
     const act = el.dataset.act;
     if (act === "toggle-notes") {
       notesOn = !notesOn;
@@ -260,6 +268,11 @@
       event.preventDefault();
       revealAt = event.key === "ArrowLeft" ? Math.max(0, revealAt - 1) : Math.min(steps.length - 1, revealAt + 1);
       route();
+    } else if (view === "show" && (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === " ")) {
+      event.preventDefault();
+      const dir = event.key === "ArrowLeft" ? -1 : 1;
+      showAt = Math.min(ShowClicks.count - 1, Math.max(0, showAt + dir));
+      route();
     } else if (view === "present" && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
       publish();
       const run = ShowRender.run();
@@ -310,7 +323,7 @@
           state.orders = data.orders;
           save();
         }
-        const sig = (list) => list.map((sub) => sub.id + ":" + (sub.thumb || "") + ":" + (sub.dq ? "dq" : "") + ":" + (sub.note || "")).join("\n");
+        const sig = (list) => list.map((sub) => sub.id + ":" + (sub.thumb || "") + ":" + (sub.dq ? "dq" : "") + ":" + (sub.note || "") + ":" + (sub.late || "")).join("\n");
         const savedIds = sig(state.submissions);
         const nextIds = sig(incoming);
         const savedReal = state.practice === false && state.submissions.length;

@@ -172,6 +172,8 @@ h2 { font-size: 1.7rem; }
   align-items: center;
 }
 .faceoff:has(.noted) { grid-template-columns: 1fr; }
+.faceoff.n2:has(.noted) { grid-template-columns: 1fr 1fr; }
+.faceoff.n2 .panel.show.noted { grid-template-columns: 1fr; align-items: start; }
 .faceoff.n3:has(.noted) { grid-template-columns: 1fr 1fr 1fr; }
 .faceoff.n3 .panel.show.noted { grid-template-columns: 1fr; align-items: start; }
 .faceoff.n3 .faculty { font-size: clamp(1.15rem, 1.7vw, 1.55rem); }
@@ -392,6 +394,28 @@ h2 { font-size: 1.7rem; }
   margin: 0;
   color: var(--steel);
 }
+.stage-slide.show-step { justify-content: flex-start; padding-top: 4vh; }
+.stage-slide.show-step h1 { margin: 0 0 0.8rem; }
+.show-board { list-style: none; margin: 0; padding: 0; }
+.show-board li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
+  border-bottom: 2px solid var(--line);
+}
+.show-board .who {
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-weight: 600;
+}
+.show-board .pts {
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1;
+  color: var(--measure);
+}
+.stage-slide .faceoff, .stage-slide .solo-show { width: 100%; }
 .tie-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; margin-top: 1.2rem; }
 .banner {
   display: flex;

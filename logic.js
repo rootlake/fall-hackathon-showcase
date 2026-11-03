@@ -202,6 +202,13 @@
       const result = listed.length === entered[dept.id].length && listed.length > 1
         ? { state: "ranked", places: listed.map((team, i) => ({ team: team, points: PAY[i], sum: null })) }
         : columnResult(entered[dept.id], (ratings || {})[dept.id], (tieOrders || {})[dept.id]);
+      if (result.state === "ranked") {
+        (result.places || []).forEach((place) => {
+          const late = (submissions || []).some((sub) => !sub.dq && sub.late && sub.team === place.team &&
+            (sub.departments || []).includes(dept.id));
+          if (late) place.points = Math.max(0, place.points - 1);
+        });
+      }
       perDept[dept.id] = result;
       if (result.state === "needs-judges" || result.state === "tie") pending = true;
       (result.places || []).forEach((place) => { totals[place.team] += place.points; });

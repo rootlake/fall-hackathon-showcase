@@ -73,6 +73,13 @@ const board = L.standings(submissions, {
 assert(board.totals.momentum === 4 && board.totals.torque === 3 && board.totals.wavelength === 4, "standings add up");
 assert(board.totals.amplitude === 0 && board.pending === false, "missing team scores zero");
 
+const lateBoard = L.standings([
+  { id: "w", team: "wavelength", departments: ["history"] },
+  { id: "t", team: "torque", departments: ["history"], late: "after" },
+], {}, {}, { history: ["wavelength", "torque"] });
+assert(lateBoard.perDept.history.places[0].points === 4, "first stays 4");
+assert(lateBoard.perDept.history.places[1].team === "torque" && lateBoard.perDept.history.places[1].points === 2, "late second loses a point");
+
 const script = L.revealScript({ momentum: 12, amplitude: 9, torque: 9, wavelength: 4 }, []);
 assert(script[0].place === 4 && script[0].team === "wavelength", "fourth is called first");
 assert(script[1].kind === "tie" && script[1].before === 3, "a tie for third stops the show");

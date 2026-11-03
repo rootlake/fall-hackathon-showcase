@@ -8,6 +8,7 @@
   let state = load();
   let revealAt = 0;
   let presentAt = 0;
+  let notesOn = true;
   let openStage = "pack";
   let lastView = "";
 
@@ -96,7 +97,7 @@
   function publish() {
     window.S = {
       L, app, treeEl, crumbEl, state, esc, safeUrl, standing, submission, teamSubs,
-      covering, openUrl, host, subName, thumb, card, revealAt, presentAt, openStage,
+      covering, openUrl, host, subName, thumb, card, revealAt, presentAt, openStage, notesOn,
       WORDS: { 4: "Fourth", 3: "Third", 1: "First" },
     };
   }
@@ -168,7 +169,10 @@
     const el = event.target.closest("[data-act]");
     if (!el) return;
     const act = el.dataset.act;
-    if (act === "import") {
+    if (act === "toggle-notes") {
+      notesOn = !notesOn;
+      route();
+    } else if (act === "import") {
       const next = L.parseSheet(document.querySelector("#sheet-paste").value);
       const note = document.querySelector("#sheet-note");
       if (!next.length) { note.textContent = "No team rows in that paste. Include the header."; return; }
@@ -306,7 +310,7 @@
           state.orders = data.orders;
           save();
         }
-        const sig = (list) => list.map((sub) => sub.id + ":" + (sub.thumb || "") + ":" + (sub.dq ? "dq" : "")).join("\n");
+        const sig = (list) => list.map((sub) => sub.id + ":" + (sub.thumb || "") + ":" + (sub.dq ? "dq" : "") + ":" + (sub.note || "")).join("\n");
         const savedIds = sig(state.submissions);
         const nextIds = sig(incoming);
         const savedReal = state.practice === false && state.submissions.length;

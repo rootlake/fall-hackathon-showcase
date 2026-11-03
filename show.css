@@ -161,7 +161,26 @@ h2 { font-size: 1.7rem; }
 .faceoff .panel { display: flex; flex-direction: column; min-width: 0; }
 .faceoff .panel h2 { font-size: clamp(1.2rem, 2vw, 1.8rem); }
 .panel.show { position: relative; }
+.panel.show .demo { position: relative; min-width: 0; }
 .panel.show .thumb { height: 14rem; }
+.dept-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.dept-bar h1 { margin-bottom: 0; }
+.panel.show.noted {
+  display: grid;
+  grid-template-columns: minmax(14rem, 22rem) minmax(0, 1fr);
+  gap: 0.4rem 1.75rem;
+  align-items: center;
+}
+.faceoff:has(.noted) { grid-template-columns: 1fr; }
+.solo-show:has(.noted) { width: min(76rem, 100%); }
+.solo-show:has(.noted) .panel.show { width: 100%; }
+.faculty {
+  margin: 0;
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(1.65rem, 3vw, 2.5rem);
+  line-height: 1.28;
+  color: var(--ink);
+}
 .solo-show { display: flex; justify-content: center; }
 .solo-show .panel.show { width: min(26rem, 100%); }
 .solo-show .panel.show .thumb { height: auto; aspect-ratio: 1; }

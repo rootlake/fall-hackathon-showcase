@@ -4,12 +4,13 @@ function projectPanel(sub, teamId, points) {
   const team = S.L.teamById(teamId);
   const src = sub ? S.openUrl(sub) : "";
   const award = points == null ? "" : '<b class="award">' + points + "</b>";
-  return '<article class="panel show">' + award +
+  const quote = S.notesOn && sub && sub.note ? '<blockquote class="faculty">' + S.esc(sub.note) + "</blockquote>" : "";
+  return '<article class="panel show' + (quote ? " noted" : "") + '"><div class="demo">' + award +
     '<h2><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</h2>" +
     (sub ? S.thumb(sub) : "") +
     '<p class="proj">' + S.esc(sub ? (sub.label || S.subName(sub)) : "") + "</p>" +
     (src ? '<a class="live" href="' + S.esc(src) + '" target="_blank" rel="noopener">' + S.esc(src) + "</a>" : "<p>No public link.</p>") +
-    "</article>";
+    "</div>" + quote + "</article>";
 }
 
 const ShowRender = {
@@ -256,7 +257,14 @@ const ShowRender = {
         return projectPanel(sub, teamId, place ? place.points : null);
       }).join("") + "</div>";
     }
-    S.app.innerHTML = "<h1>" + S.esc(dept.name) + "</h1>" + body;
+    const noted = teams.some((teamId) => {
+      const sub = S.covering(teamId, dept.id);
+      return sub && sub.note;
+    });
+    const toggle = noted
+      ? '<button type="button" class="quiet" data-act="toggle-notes">' + (S.notesOn ? "Hide comments" : "Show comments") + "</button>"
+      : "";
+    S.app.innerHTML = '<div class="dept-bar"><h1>' + S.esc(dept.name) + "</h1>" + toggle + "</div>" + body;
   },
 
   reveal() {

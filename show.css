@@ -425,6 +425,9 @@ h2 { font-size: 1.7rem; }
   color: var(--measure);
   animation: points-in 0.65s 0.12s both;
 }
+.finale-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; width: min(76rem, 100%); }
+.place-word.long { font-size: clamp(3rem, 8vw, 6.5rem); }
+.finale-note { max-width: 40rem; font-size: clamp(1.25rem, 2.4vw, 1.85rem); line-height: 1.35; }
 .confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
 @keyframes finale-pop {
   from { opacity: 0; transform: translateY(1.6rem) scale(0.96); }

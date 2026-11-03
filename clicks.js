@@ -100,14 +100,18 @@ const ShowClicks = (function () {
     const out = [];
     groups.forEach((group) => {
       const ids = group.teams.slice();
-      if (ids.length > 1) shuffle(ids);
-      const tied = group.from !== group.to;
+      if (group.from === 1 && ids.length > 1) {
+        shuffle(ids);
+        out.push({ kind: "pair", teams: ids, points: group.points });
+        out.push({ kind: "tie", confetti: true, teams: ids.slice(), points: group.points });
+        out.push({ kind: "tiebreaker" });
+        out.push({ kind: "english" });
+        return;
+      }
       ids.forEach((id) => {
-        out.push({ team: id, points: group.points, word: tied && group.from === 1 ? "First" : (WORD[group.from] || "Tied"), tied: tied });
+        out.push({ team: id, points: group.points, word: WORD[group.from] || "Tied" });
       });
     });
-    const winners = groups.filter((group) => group.from === 1).pop();
-    if (winners) out.push({ confetti: true, teams: winners.teams.slice(), points: winners.points, tied: winners.teams.length > 1 });
     return out;
   }
 
@@ -118,7 +122,7 @@ const ShowClicks = (function () {
 
   function stopFinale() {
     live = false;
-    clearInterval(timer);
+    clearTimeout(timer);
     timer = 0;
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
@@ -181,10 +185,21 @@ const ShowClicks = (function () {
     const item = script[beat];
     if (!item) return;
     let body;
-    if (item.confetti) {
-      body = '<p class="place-word">' + (item.tied ? "Tie" : "First") + "</p>" +
+    if (item.kind === "pair") {
+      body = '<p class="place-word">First</p><div class="finale-pair">' +
+        item.teams.map((id) => "<div>" + teamLine(S.L.teamById(id)) +
+          '<p class="points-line finale-points">' + item.points + " points</p></div>").join("") +
+        "</div>";
+    } else if (item.kind === "tie") {
+      body = '<p class="place-word">Tie</p>' +
         item.teams.map((id) => teamLine(S.L.teamById(id))).join("") +
         '<p class="points-line finale-points">' + item.points + " points</p>";
+    } else if (item.kind === "tiebreaker") {
+      body = '<p class="place-word long">Tiebreaker?!</p>';
+    } else if (item.kind === "english") {
+      body = '<p class="place-word">English</p><p class="team-line">One last simulation</p>' +
+        '<p class="points-line finale-points">30 minutes</p>' +
+        '<p class="lead finale-note">An English class. It was not represented in this hackathon. Anyone can participate. The score counts for the individual tiebreaker and for team placement.</p>';
     } else {
       body = '<p class="place-word">' + item.word + "</p>" + teamLine(S.L.teamById(item.team)) +
         '<p class="points-line finale-points">' + item.points + " points</p>";
@@ -201,13 +216,17 @@ const ShowClicks = (function () {
   }
 
   function arm() {
-    clearInterval(timer);
-    if (beat >= script.length - 1) { timer = 0; return; }
-    timer = setInterval(() => {
-      if (beat >= script.length - 1) { clearInterval(timer); timer = 0; return; }
+    clearTimeout(timer);
+    timer = 0;
+    const item = script[beat];
+    if (!item || beat >= script.length - 1) return;
+    if (item.kind === "tiebreaker" || item.kind === "english") return;
+    const wait = item.kind === "pair" || item.kind === "tie" ? 3200 : 1700;
+    timer = setTimeout(() => {
       beat += 1;
       paintFinale();
-    }, 1700);
+      arm();
+    }, wait);
   }
 
   function render(index) {

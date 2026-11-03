@@ -35,7 +35,7 @@ const ShowClicks = (function () {
       const sub = S.covering(teamId, deptId);
       const place = places.find((row) => row.team === teamId);
       const pts = withPoints && place ? place.points : null;
-      return projectPanel(sub, teamId, pts, withNotes);
+      return projectPanel(sub, teamId, pts, withNotes).replace("<article ", '<article data-team="' + teamId + '" ');
     }).join("");
     const wrap = order.length === 1 ? "solo-show" : "faceoff n" + Math.min(order.length, 4);
     return { ready: ready, html: '<div class="' + wrap + '">' + html + "</div>" };
@@ -113,6 +113,43 @@ const ShowClicks = (function () {
         });
       });
     }, 1200);
+  }
+
+  function captureFaceoff() {
+    const boxes = {};
+    S.app.querySelectorAll("article[data-team]").forEach((el) => {
+      boxes[el.dataset.team] = el.getBoundingClientRect();
+    });
+    return boxes;
+  }
+
+  function settleAwards(boxes) {
+    if (!boxes) return;
+    const cards = S.app.querySelectorAll("article[data-team]");
+    cards.forEach((el) => {
+      const prev = boxes[el.dataset.team];
+      if (!prev) return;
+      const now = el.getBoundingClientRect();
+      const dx = prev.left - now.left;
+      const dy = prev.top - now.top;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+      el.style.zIndex = "3";
+      el.style.transition = "none";
+      el.style.transform = "translate(" + dx + "px, " + dy + "px)";
+    });
+    S.app.querySelectorAll(".medal").forEach((medal, i) => {
+      medal.classList.add("fly");
+      medal.style.animationDelay = (0.28 + i * 0.14) + "s";
+    });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        cards.forEach((el) => {
+          if (!el.style.transform) return;
+          el.style.transition = "transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1)";
+          el.style.transform = "none";
+        });
+      });
+    });
   }
 
   function gallery() {
@@ -303,6 +340,12 @@ const ShowClicks = (function () {
 
   function render(index) {
     const at = Math.min(Math.max(0, index), STEPS.length - 1);
+    const step = STEPS[at];
+    const prevStep = STEPS[at - 1];
+    const handoff = prevStep && step && prevStep.dept === step.dept &&
+      (prevStep.kind === "preview" || prevStep.kind === "faceoff") &&
+      (step.kind === "points" || step.kind === "results");
+    const boxes = handoff ? captureFaceoff() : null;
     stopBoard();
     if (STEPS[at].kind === "board") {
       if (live) stopFinale();
@@ -314,6 +357,7 @@ const ShowClicks = (function () {
       const body = slide(STEPS[at]);
       S.app.innerHTML = '<section class="stage-slide show-step">' + body +
         '<p class="keys">' + (at + 1) + " / " + STEPS.length + " · click or arrows</p></section>";
+      if (boxes) settleAwards(boxes);
       return;
     }
     if (!live) {

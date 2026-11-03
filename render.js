@@ -1,9 +1,15 @@
 /* Views for the show. Reads the shared `S` object set by show.js. */
 
+function medal(points) {
+  const n = Number(points);
+  const tier = n === 4 || n === 3 || n === 2 || n === 1 ? " medal-" + n : "";
+  return '<b class="medal' + tier + '">' + points + "</b>";
+}
+
 function projectPanel(sub, teamId, points, notes) {
   const team = S.L.teamById(teamId);
   const src = sub ? S.openUrl(sub) : "";
-  const award = points == null ? "" : '<b class="award">' + points + "</b>";
+  const award = points == null ? "" : medal(points);
   const showNotes = notes == null ? S.notesOn : notes;
   const quote = showNotes && sub && sub.note ? '<blockquote class="faculty">' + S.esc(sub.note) + "</blockquote>" : "";
   return '<article class="panel show' + (quote ? " noted" : "") + '"><div class="demo">' + award +
@@ -121,7 +127,7 @@ const ShowRender = {
           if (!sub) { html += '<div class="cell gap in"></div>'; return; }
           const solo = result.state === "solo";
           const key = (sub.departments || [])[0] === dept.id ? sub.id : sub.id + "-" + dept.id;
-          const badge = stage === "scored" && solo ? "<b>4</b>" : "";
+          const badge = stage === "scored" && solo ? medal(4) : "";
           html += openTile(sub, team, solo ? " solo" + (stage === "scored" ? " celebrate" : "") : " crowded", key, badge);
         });
       }
@@ -216,7 +222,7 @@ const ShowRender = {
           return;
         }
         const place = (result.places || []).find((row) => row.team === team.id);
-        const badge = place ? "<b>" + place.points + "</b>" : "<b>?</b>";
+        const badge = place ? medal(place.points) : "<b>?</b>";
         html += '<a class="cell ' + result.state + '" href="#/teams/' + team.id + "/" + sub.id + '">' + S.thumb(sub) + badge + "</a>";
       });
       html += '<div class="total">' + now.totals[team.id] + "</div>";

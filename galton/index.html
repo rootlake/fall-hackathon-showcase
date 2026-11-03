@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Statistics · Galton Board</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <h1>
+        <span class="dept">Math Department</span>
+        <span class="course">Statistics</span>
+      </h1>
+      <div class="intro">
+        <p class="lesson">Galton Board</p>
+        <p class="objective"><strong>Objective.</strong> See why balls that bounce left or right at random pile into a bell curve, and test that pile against the binomial prediction.</p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="stage" aria-label="Simulation">
+        <div class="stage-top">
+          <span>Live model</span>
+          <span id="boardMeta">8 rows</span>
+          <span id="runState">Ready</span>
+        </div>
+        <div id="board"></div>
+        <p class="stage-hint">Click the board to drop one ball. Space pauses. R resets.</p>
+      </section>
+
+      <aside class="panel">
+        <section>
+          <h2>Run the board</h2>
+          <div class="actions">
+            <button type="button" id="drop1">Drop 1</button>
+            <button type="button" id="drop40">Drop 40</button>
+            <button type="button" id="drop120" class="primary">Drop 120</button>
+            <button type="button" id="pause">Pause</button>
+            <button type="button" id="reset">Reset</button>
+          </div>
+          <p class="notice" id="notice" role="status"></p>
+        </section>
+
+        <section>
+          <h2>Results</h2>
+          <dl class="stats">
+            <div>
+              <dt>Settled</dt>
+              <dd id="statSettled">0</dd>
+              <dd class="sub" id="statSettledSub">of this run</dd>
+            </div>
+            <div>
+              <dt>Average bin</dt>
+              <dd id="statMean">—</dd>
+              <dd class="sub" id="statMeanSub">fair 4.0</dd>
+            </div>
+            <div>
+              <dt>Spread</dt>
+              <dd id="statSd">—</dd>
+              <dd class="sub" id="statSdSub">fair 1.4</dd>
+            </div>
+            <div>
+              <dt id="statFourthLabel">Agreement</dt>
+              <dd id="statFourth">—</dd>
+              <dd class="sub" id="statFourthSub">with the fair model</dd>
+            </div>
+          </dl>
+          <p class="insight" id="insight">The red marks are the prediction for a fair board. Drop balls to test it.</p>
+        </section>
+
+        <section>
+          <h2>Distribution</h2>
+          <div class="chart" id="chart" role="img" aria-label="Bin chart"></div>
+          <p class="chart-key">
+            <span><i class="swatch run"></i> This run</span>
+            <span><i class="swatch fair"></i> Fair prediction</span>
+            <span><i class="swatch path"></i> Paths into the bin</span>
+          </p>
+          <p class="why" id="why"></p>
+        </section>
+
+        <section>
+          <h2>Change the experiment</h2>
+          <div class="field">
+            <div class="field-label">
+              <label for="rows">Peg rows</label>
+              <output id="rowsOut" for="rows">8</output>
+            </div>
+            <input id="rows" type="range" min="6" max="12" step="1" value="8" />
+            <p class="field-help">Changing rows clears the board. More rows means more bounces.</p>
+          </div>
+
+          <div class="field">
+            <div class="field-label">
+              <label for="wind">Side wind</label>
+              <output id="windOut" for="wind">Fair</output>
+            </div>
+            <input id="wind" type="range" min="-100" max="100" step="1" value="0" />
+            <p class="field-help">Wind pushes falling balls sideways. Reset before a clean comparison.</p>
+          </div>
+
+          <label class="check">
+            <input id="expected" type="checkbox" checked />
+            Show the fair prediction
+          </label>
+        </section>
+
+        <section>
+          <h2>How to use this</h2>
+          <ol>
+            <li>Drop one ball. One trial can land in any bin.</li>
+            <li>Drop 120. The middle should grow tallest.</li>
+            <li>Compare the green bars with the red marks.</li>
+            <li>Set a side wind, press Reset, and drop again. The average should move off the dashed line.</li>
+          </ol>
+          <p class="formula" id="formula"></p>
+          <p class="credit">Matter.js runs the physics. The bars count where those balls actually stop.</p>
+        </section>
+      </aside>
+    </main>
+  </div>
+  <script src="vendor/matter.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

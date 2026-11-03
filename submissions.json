@@ -1,0 +1,134 @@
+{
+  "submissions": [
+    {
+      "id": "wavelength-1",
+      "team": "wavelength",
+      "url": "https://cgoldstein27-maker.github.io/Hackathon_Frenchgame/",
+      "repo": "https://github.com/cgoldstein27-maker/Hackathon_Frenchgame",
+      "departments": ["languages"],
+      "label": "La Chute",
+      "thumb": "thumbs/wavelength-1.jpg",
+      "hint": []
+    },
+    {
+      "id": "wavelength-2",
+      "team": "wavelength",
+      "url": "https://jlake27-lgtm.github.io/Hackathon-Battle-Simulator/battle-simulator.html",
+      "repo": "https://github.com/jlake27-lgtm/Hackathon-Battle-Simulator",
+      "departments": ["history"],
+      "label": "Battle Simulator",
+      "thumb": "thumbs/wavelength-2.jpg",
+      "hint": []
+    },
+    {
+      "id": "wavelength-3",
+      "team": "wavelength",
+      "url": "https://justusschroeder.github.io/Hack-a-thon-Aquaponics/",
+      "repo": "https://github.com/JustusSchroeder/Hack-a-thon-Aquaponics",
+      "departments": ["science"],
+      "label": "AquaLoop",
+      "thumb": "thumbs/wavelength-3.jpg",
+      "hint": []
+    },
+    {
+      "id": "wavelength-4",
+      "team": "wavelength",
+      "url": "https://echelly27-ai.github.io/Hackaton-Well-being-Eli-2026/",
+      "repo": "https://github.com/echelly27-ai/Hackaton-Well-being-Eli-2026",
+      "departments": ["wellbeing"],
+      "label": "Fuel & Rest",
+      "thumb": "thumbs/wavelength-4.jpg",
+      "hint": []
+    },
+    {
+      "id": "amplitude-1",
+      "team": "amplitude",
+      "url": "https://caydenauyang.github.io/amplitude-labs/physics/",
+      "repo": "https://github.com/caydenauyang/amplitude-labs",
+      "departments": ["science"],
+      "label": "Orbit Lab",
+      "thumb": "thumbs/amplitude-1.jpg",
+      "hint": []
+    },
+    {
+      "id": "amplitude-2",
+      "team": "amplitude",
+      "url": "https://caydenauyang.github.io/amplitude-labs/music/",
+      "repo": "https://github.com/caydenauyang/amplitude-labs",
+      "departments": ["art"],
+      "label": "Gravity Piano",
+      "thumb": "thumbs/amplitude-2.jpg",
+      "hint": []
+    },
+    {
+      "id": "amplitude-3",
+      "team": "amplitude",
+      "url": "https://caydenauyang.github.io/amplitude-labs/languages/",
+      "repo": "https://github.com/caydenauyang/amplitude-labs",
+      "departments": ["languages"],
+      "label": "Lingo Drop",
+      "thumb": "thumbs/amplitude-3.jpg",
+      "hint": []
+    },
+    {
+      "id": "amplitude-4",
+      "team": "amplitude",
+      "url": "https://caydenauyang.github.io/amplitude-labs/stats/",
+      "repo": "https://github.com/caydenauyang/amplitude-labs",
+      "departments": ["math"],
+      "label": "Galton Lab",
+      "thumb": "thumbs/amplitude-4.jpg",
+      "hint": []
+    },
+    {
+      "id": "torque-1",
+      "team": "torque",
+      "url": "galton/index.html",
+      "repo": "https://github.com/onbiggerthingsB/Hackathon",
+      "departments": ["math"],
+      "label": "Galton Board",
+      "thumb": "thumbs/torque-1.jpg",
+      "hint": []
+    },
+    {
+      "id": "torque-2",
+      "team": "torque",
+      "url": "https://hqddd-dot.github.io/paint-mixer/",
+      "repo": "https://github.com/onbiggerthingsB/Hackathon",
+      "departments": ["art"],
+      "label": "Paint Mixer",
+      "thumb": "thumbs/torque-2.jpg",
+      "hint": []
+    },
+    {
+      "id": "torque-3",
+      "team": "torque",
+      "url": "https://pomfret-coding-index.vercel.app",
+      "repo": "https://github.com/onbiggerthingsB/Hackathon",
+      "departments": ["science"],
+      "label": "Coding Index",
+      "thumb": "thumbs/torque-3.jpg",
+      "hint": []
+    },
+    {
+      "id": "momentum-1",
+      "team": "momentum",
+      "url": "https://luker5776.github.io/FallHackathonLanguage/",
+      "repo": "https://github.com/luker5776/FallHackathonLanguage",
+      "departments": ["languages"],
+      "label": "Jarticles",
+      "thumb": "thumbs/momentum-1.jpg",
+      "hint": []
+    },
+    {
+      "id": "momentum-2",
+      "team": "momentum",
+      "url": "https://brettdaniels2017.github.io/FallHackathonArt/",
+      "repo": "https://github.com/brettdaniels2017/FallHackathonArt",
+      "departments": ["art"],
+      "label": "Sandscape",
+      "thumb": "thumbs/momentum-2.jpg",
+      "hint": []
+    }
+  ]
+}

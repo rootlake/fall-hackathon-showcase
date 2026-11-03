@@ -453,6 +453,12 @@ h2 { font-size: 1.7rem; }
   align-items: baseline;
   gap: 2rem;
   border-bottom: 2px solid var(--line);
+  background: var(--paper);
+}
+.show-board .pts.bump { animation: pts-bump 0.45s ease; }
+@keyframes pts-bump {
+  from { transform: scale(1.28); }
+  to { transform: scale(1); }
 }
 .show-board .who {
   font-family: "Iowan Old Style", Palatino, Georgia, serif;

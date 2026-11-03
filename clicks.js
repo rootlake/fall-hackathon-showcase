@@ -36,28 +36,83 @@ const ShowClicks = (function () {
     return { ready: ready, html: '<div class="' + wrap + '">' + html + "</div>" };
   }
 
-  function board(depts) {
+  let boardTimer = 0;
+
+  function rowsFor(depts) {
     const now = S.standing();
     const totals = {};
     S.L.TEAMS.forEach((team) => { totals[team.id] = 0; });
     let waiting = false;
     depts.forEach((id) => {
       const result = now.perDept[id];
+      if (!result) return;
       if (result.state === "needs-judges" || result.state === "tie") waiting = true;
       (result.places || []).forEach((place) => { totals[place.team] += place.points; });
     });
     const rows = S.L.TEAMS.map((team) => ({ team: team, points: totals[team.id] }));
     rows.sort((a, b) => b.points - a.points || a.team.name.localeCompare(b.team.name));
-    const list = rows.map((row) => '<li><span class="who"><i class="mark">' + row.team.mark + "</i> " +
-      S.esc(row.team.name) + '<small class="roster">' + S.memberLine(row.team) + "</small></span><b class=\"pts\">" + row.points + "</b></li>").join("");
-    return "<h1>So far</h1>" +
-      (waiting ? '<p class="lead">One face-off on this board is still open.</p>' : "") +
-      '<ol class="show-board">' + list + "</ol>";
+    return { rows: rows, waiting: waiting };
+  }
+
+  function rowHtml(row) {
+    return '<li data-team="' + row.team.id + '"><span class="who"><i class="mark">' + row.team.mark + "</i> " +
+      S.esc(row.team.name) + '<small class="roster">' + S.memberLine(row.team) + '</small></span><b class="pts">' +
+      row.points + "</b></li>";
+  }
+
+  function stopBoard() {
+    clearTimeout(boardTimer);
+    boardTimer = 0;
+  }
+
+  function paintBoard(depts, stepNo) {
+    stopBoard();
+    const prev = rowsFor(depts.slice(0, -1));
+    const next = rowsFor(depts);
+    S.app.innerHTML = '<section class="stage-slide show-step"><h1>So far</h1>' +
+      (next.waiting ? '<p class="lead">One face-off on this board is still open.</p>' : "") +
+      '<ol class="show-board">' + prev.rows.map(rowHtml).join("") + "</ol>" +
+      '<p class="keys">' + stepNo + " / " + STEPS.length + " · click or arrows</p></section>";
+    const unchanged = prev.rows.every((row, i) => row.team.id === next.rows[i].team.id && row.points === next.rows[i].points);
+    if (unchanged) return;
+    boardTimer = setTimeout(() => {
+      const list = S.app.querySelector(".show-board");
+      if (!list) return;
+      const first = {};
+      list.querySelectorAll("[data-team]").forEach((el) => { first[el.dataset.team] = el.getBoundingClientRect(); });
+      next.rows.forEach((row) => {
+        const el = list.querySelector('[data-team="' + row.team.id + '"]');
+        const pts = el.querySelector(".pts");
+        if (Number(pts.textContent) !== row.points) {
+          pts.textContent = String(row.points);
+          pts.classList.remove("bump");
+          void pts.offsetWidth;
+          pts.classList.add("bump");
+        }
+        list.appendChild(el);
+      });
+      list.querySelectorAll("[data-team]").forEach((el) => {
+        const dy = first[el.dataset.team].top - el.getBoundingClientRect().top;
+        if (Math.abs(dy) < 1) return;
+        el.style.zIndex = "2";
+        el.style.transition = "none";
+        el.style.transform = "translateY(" + dy + "px)";
+      });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          list.querySelectorAll("[data-team]").forEach((el) => {
+            if (!el.style.transform) return;
+            el.style.transition = "transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1)";
+            el.style.transform = "none";
+          });
+        });
+      });
+    }, 1200);
   }
 
   function slide(step) {
     const dept = S.L.deptById(step.dept);
-    if (step.kind === "board") return board(step.depts);
+    if (step.kind === "board") return "";
     if (step.kind === "faceoff") {
       return "<h1>" + S.esc(dept.name) + " face-off</h1>" + panels(step.dept, false, false).html;
     }
@@ -231,6 +286,12 @@ const ShowClicks = (function () {
 
   function render(index) {
     const at = Math.min(Math.max(0, index), STEPS.length - 1);
+    stopBoard();
+    if (STEPS[at].kind === "board") {
+      if (live) stopFinale();
+      paintBoard(STEPS[at].depts, at + 1);
+      return;
+    }
     if (STEPS[at].kind !== "finale") {
       if (live) stopFinale();
       const body = slide(STEPS[at]);

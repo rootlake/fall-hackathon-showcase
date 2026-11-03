@@ -2,7 +2,8 @@
   "orders": {
     "languages": ["momentum", "wavelength", "amplitude"],
     "art": ["amplitude", "momentum", "torque"],
-    "history": ["wavelength", "torque"]
+    "history": ["wavelength", "torque"],
+    "math": ["amplitude", "torque", "momentum"]
   },
   "submissions": [
     {

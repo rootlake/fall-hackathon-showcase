@@ -1,23 +1,22 @@
-/* Click-through for class. Scored three-ways first, then the open
-   face-offs, then the two solos. That keeps the early leaderboard a
-   one-point race and holds the two solo 4s until the last cards. */
+/* Click-through for class. Math first (two similar boards, one dead
+   demo), then the scored three-ways, Science, then the two solos. */
 const ShowClicks = (function () {
   const STEPS = [
     { kind: "gallery" },
-    { kind: "preview", dept: "art" },
-    { kind: "points", dept: "art" },
-    { kind: "board", depts: ["art"] },
-    { kind: "preview", dept: "languages" },
-    { kind: "points", dept: "languages" },
-    { kind: "board", depts: ["art", "languages"] },
     { kind: "faceoff", dept: "math" },
     { kind: "results", dept: "math" },
-    { kind: "board", depts: ["art", "languages", "math"] },
+    { kind: "board", depts: ["math"] },
+    { kind: "preview", dept: "art" },
+    { kind: "points", dept: "art" },
+    { kind: "board", depts: ["math", "art"] },
+    { kind: "preview", dept: "languages" },
+    { kind: "points", dept: "languages" },
+    { kind: "board", depts: ["math", "art", "languages"] },
     { kind: "faceoff", dept: "science" },
     { kind: "results", dept: "science" },
-    { kind: "board", depts: ["art", "languages", "math", "science"] },
+    { kind: "board", depts: ["math", "art", "languages", "science"] },
     { kind: "points", dept: "history" },
-    { kind: "board", depts: ["art", "languages", "math", "science", "history"] },
+    { kind: "board", depts: ["math", "art", "languages", "science", "history"] },
     { kind: "points", dept: "wellbeing" },
     { kind: "finale" },
   ];

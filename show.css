@@ -426,7 +426,7 @@ h2 { font-size: 1.7rem; }
 .opener.filed {
   width: 100%;
   align-content: center;
-  grid-template-columns: 9.2rem repeat(7, minmax(0, 1fr)) 3.2rem;
+  grid-template-columns: 11.5rem repeat(7, minmax(0, 1fr)) 3.2rem;
   grid-template-rows: auto repeat(4, auto);
 }
 
@@ -435,6 +435,14 @@ h2 { font-size: 1.7rem; }
 .opener .cell { min-height: 0; height: 100%; }
 .opener .thumb { height: 100%; }
 .opener .team-head { align-self: center; }
+.opener .team-head small {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  color: var(--steel);
+}
 
 .opener.pack .thumb.poster {
   align-items: center;

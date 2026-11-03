@@ -103,7 +103,8 @@ const ShowRender = {
     }
     html += '<div class="pts-head">pts</div>';
     S.L.TEAMS.forEach((team) => {
-      html += '<a class="team-head" href="#/teams/' + team.id + '"><i class="mark">' + team.mark + "</i> " + S.esc(team.name) + "</a>";
+      html += '<a class="team-head" href="#/teams/' + team.id + '"><i class="mark">' + team.mark + "</i> " + S.esc(team.name) +
+        "<small>" + S.esc(team.members.join(", ")) + "</small></a>";
       const subs = S.teamSubs(team.id);
       if (!filed) {
         subs.slice(0, 4).forEach((sub) => { html += openTile(sub, team, "", sub.id); });
@@ -143,10 +144,10 @@ const ShowRender = {
     const header = 42;
     const byHeight = Math.floor((grid.clientHeight - header - gap * 4) / 4);
     const maxW = grid.parentElement.clientWidth;
-    const byWidth = Math.floor((maxW - 150 - 58 - gap * 5) / 4);
+    const byWidth = Math.floor((maxW - 184 - 58 - gap * 5) / 4);
     const size = Math.max(48, Math.min(byHeight, byWidth));
-    grid.style.width = (150 + 58 + size * 4 + gap * 5) + "px";
-    grid.style.gridTemplateColumns = "150px repeat(4, " + size + "px) 58px";
+    grid.style.width = (184 + 58 + size * 4 + gap * 5) + "px";
+    grid.style.gridTemplateColumns = "184px repeat(4, " + size + "px) 58px";
     grid.style.gridTemplateRows = header + "px repeat(4, " + size + "px)";
   },
 

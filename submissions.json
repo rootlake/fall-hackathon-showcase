@@ -129,6 +129,16 @@
       "label": "Sandscape",
       "thumb": "thumbs/momentum-2.jpg",
       "hint": []
+    },
+    {
+      "id": "momentum-3",
+      "team": "momentum",
+      "url": "https://carlo-negotiations-count-fog.trycloudflare.com/",
+      "repo": "",
+      "departments": ["math"],
+      "label": "House Edge",
+      "late": "2026-11-02 21:55",
+      "hint": []
     }
   ]
 }
